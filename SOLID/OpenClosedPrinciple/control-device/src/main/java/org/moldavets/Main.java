@@ -1,11 +1,23 @@
 package org.moldavets;
 
-import org.moldavets.model.AbstractDevice;
+
+import org.moldavets.contoller.Impl.RemoteController;
 import org.moldavets.model.Impl.PlayStation;
+import org.moldavets.model.Impl.Projector;
+import org.moldavets.model.Switchable;
 
 public class Main {
     public static void main(String[] args) {
-        AbstractDevice abstractDevice = new PlayStation(1L,"Ps5", false);
-        abstractDevice.switchPower();
+        Switchable playStation = new PlayStation();
+        Switchable projector = new Projector();
+
+        RemoteController remoteController = RemoteController.getInstance();
+        remoteController.connectToDevice(playStation);
+        remoteController.switchDeviceOn();
+        remoteController.switchDeviceOff();
+
+        remoteController.connectToDevice(projector);
+        remoteController.switchDeviceOn();
+        remoteController.switchDeviceOff();
     }
 }
