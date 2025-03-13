@@ -1,36 +1,36 @@
 package org.moldavets;
 
 import org.moldavets.model.Impl.Customer;
-import org.moldavets.model.WaitingCustomer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CoffeeAttendant {
 
     private List<Customer> customers = new ArrayList<>();
-    private String completedDrink;
+    private List<String> completedDrinks = new ArrayList<>();
 
-    public void takeOrder(Customer waitingCustomer) {
-        customers.add(waitingCustomer);
-        prepareOrder(waitingCustomer.getOrderedDrink());
+    public void takeOrder(Customer customer) {
+        customers.add(customer);
     }
 
     public void prepareOrder(String drinkToPrepare) {
-        customers.stream()
-                .findFirst()
-                .ifPresent(customer -> completedDrink = customer.getOrderedDrink());
-        callOutCompletedOrder();
+        completedDrinks.add(drinkToPrepare);
     }
 
     public void callOutCompletedOrder() {
-        customers.stream()
-                .filter(c -> c.getOrderedDrink().equalsIgnoreCase(completedDrink))
-                .findFirst()
-                .ifPresent(customer -> {
-           customer.orderReady(completedDrink);
-           completedDrink = null;
-           customers.remove(customer);
-        });
+        Iterator<Customer> customerIterator = customers.iterator();
+        while (customerIterator.hasNext()) {
+            Customer customer = customerIterator.next();
+            Iterator<String> completedDrinksIterator = completedDrinks.iterator();
+            while (completedDrinksIterator.hasNext()) {
+                String drink = completedDrinksIterator.next();
+                if(customer.getOrderedDrink().equals(drink)) {
+                    customer.orderReady(drink);
+                    completedDrinksIterator.remove();
+                    customerIterator.remove();
+                    break;
+                }
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ public class Customer implements WaitingCustomer {
 
     @Override
     public void orderReady(String preparedDrink) {
-        System.out.println("Thank you, for " + preparedDrink);
+        System.out.println(name+": Thank you, for " + preparedDrink);
     }
 
     public String getName() {
