@@ -1,45 +1,34 @@
 package org.moldavets.model.Impl;
 
+import org.moldavets.exception.PowerException;
 import org.moldavets.model.AbstractDevice;
+import org.moldavets.model.Switchable;
 
-public class PlayStation extends AbstractDevice {
+public class PlayStation extends AbstractDevice implements Switchable {
 
-    protected boolean isTvWorking = false;
-
-    public PlayStation(Long id, String name, boolean isWorked) {
-        super(id, name, isWorked);
+    @Override
+    public void switchOn() {
+        if (super.isWorked) {
+            throw new PowerException("The device is already working.");
+        }
+        loginToAccount();
+        super.isWorked = !super.isWorked;
     }
 
     @Override
-    public void switchPower() {
-        if (this.isWorked) {
-            switchTv();
-            logoutFromAccount();
-            this.isWorked = false;
-        } else {
-            switchTv();
-            loginToAccount();
-            this.isWorked = true;
+    public void switchOff() {
+        if (!super.isWorked) {
+            throw new PowerException("The device is not working now.");
         }
+        logoutFromAccount();
+        super.isWorked = !super.isWorked;
     }
 
     private void loginToAccount() {
-        System.out.println("Login to account successfully");
+        System.out.println("Login to playstation successfully");
     }
 
     private void logoutFromAccount() {
-        System.out.println("Logout from account successfully");
+        System.out.println("Logout from playstation successfully");
     }
-
-    private void switchTv() {
-        if (this.isTvWorking) {
-            isTvWorking = false;
-            System.out.println("Turning off tv");
-        } else {
-            isTvWorking = true;
-            System.out.println("Turning on tv");
-        }
-    }
-
-
 }
